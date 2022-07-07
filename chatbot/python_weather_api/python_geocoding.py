@@ -81,6 +81,8 @@ def gridToMap(x, y, code=1):
 def geocoding(address):
     app = Nominatim(user_agent="South Korea")
     location = app.geocode(address)
+    if location == None:
+        return 0, 0, None
     lat, lon = location.latitude, location.longitude
     location2 = app.reverse(f"{lat} {lon}")
     # 주어진 주소에서 필요한 주소 정보만 모아 주소 리턴
@@ -96,6 +98,8 @@ def geocoding(address):
 
 def xy_geocoding(address):
     lat, lon, ad = geocoding(address)
+    if ad == None:
+        return 0, 0, None
     x, y = mapToGrid(lat, lon)
     return x, y, ad
 

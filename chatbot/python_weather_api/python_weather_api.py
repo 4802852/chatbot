@@ -1,4 +1,5 @@
 from collections import defaultdict
+import enum
 import os, json, requests
 from datetime import datetime, timedelta
 from urllib.parse import urlencode, unquote, quote_plus
@@ -7,7 +8,7 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 sky_code = {"1": "맑음", "3": "구름많음", "4": "흐림"}
 pty_code = {
-    "0": "없음",
+    "0": "-",
     "1": "비",
     "2": "비/눈",
     "3": "눈",
@@ -75,8 +76,22 @@ def get_ultra_srt_fcst(x, y):
     return weather_data
 
 
+def make_weather_text(x, y):
+    w_data = get_ultra_srt_fcst(x, y)
+    text = ""
+    for i, key in enumerate(w_data.keys()):
+        text += key + ": "
+        text += w_data[key]["sky"] + "/"
+        text += w_data[key]["pty"] + "/"
+        text += w_data[key]["rain"]
+        if i != 5:
+            text += "\n"
+    return text
+
+
 def main():
-    get_ultra_srt_fcst()
+    # data = get_ultra_srt_fcst(60, 127)
+    make_weather_text(60, 127)
 
 
 if __name__ == "__main__":
